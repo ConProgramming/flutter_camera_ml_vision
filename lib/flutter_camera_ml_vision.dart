@@ -38,18 +38,18 @@ class CameraMlVision<T> extends StatefulWidget {
   final ErrorWidgetBuilder errorBuilder;
   final WidgetBuilder overlayBuilder;
   final CameraLensDirection cameraLensDirection;
-  final ResolutionPreset resolution;
   final Function onDispose;
+  final CameraController cameraController;
 
   CameraMlVision({
     Key key,
     @required this.onResult,
     @required this.detector,
+    @required this.cameraController;
     this.loadingBuilder,
     this.errorBuilder,
     this.overlayBuilder,
     this.cameraLensDirection = CameraLensDirection.back,
-    this.resolution,
     this.onDispose,
   }) : super(key: key);
 
@@ -166,24 +166,10 @@ class CameraMlVisionState<T> extends State<CameraMlVision<T>> {
 
       return;
     }
-    _cameraController = CameraController(
-      description,
-      widget.resolution ?? ResolutionPreset.low, // As the doc says, better to set low when streaming images to avoid drop frames on older devices
-      enableAudio: false,
-    );
+    
+    _cameraController = widget.cameraController;
+    
     if (!mounted) {
-      return;
-    }
-
-    try {
-      await _cameraController.initialize();
-    } catch (ex, stack) {
-      setState(() {
-        _cameraMlVisionState = _CameraState.error;
-        _cameraError = CameraError.cantInitializeCamera;
-      });
-      debugPrint('Can\'t initialize camera');
-      debugPrint('$ex, $stack');
       return;
     }
 
