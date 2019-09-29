@@ -45,7 +45,7 @@ class CameraMlVision<T> extends StatefulWidget {
     Key key,
     @required this.onResult,
     @required this.detector,
-    @required this.cameraController;
+    @required this.cameraController,
     this.loadingBuilder,
     this.errorBuilder,
     this.overlayBuilder,
